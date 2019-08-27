@@ -81,17 +81,14 @@ public class DynamicConfig {
                         .findFirst().orElseThrow(() -> new IllegalArgumentException("Invalid key: " + key)));
     }
 
-    @SuppressWarnings("unchecked")
     public <T> T get(String key) throws RuntimeException {
         return (T) dget(key).asObject();
     }
 
-    @SuppressWarnings("unchecked")
     public <K, V> Map<K, V> getMap(String key) throws RuntimeException {
         return (Map<K, V>) dget(key).convert().intoMap();
     }
 
-    @SuppressWarnings("unchecked")
     public <T> List<T> getList(String key) throws RuntimeException {
         return (List<T>) dget(key).convert().intoList();
     }
@@ -99,7 +96,6 @@ public class DynamicConfig {
     public String getString(String key) throws RuntimeException {
         return dget(key).convert().intoString();
     }
-    @SuppressWarnings("unchecked")
     public List<String> getStringList(String key) throws RuntimeException {
         return (List<String>) dget(key).convert().intoList();
     }
@@ -121,7 +117,6 @@ public class DynamicConfig {
                 throw new RuntimeException("Can't convert key " + key + " value \"" + value + "\" to boolean");
         }
     }
-    @SuppressWarnings("unchecked")
     public List<Boolean> getBooleanList(String key) throws RuntimeException {
         return (List<Boolean>) dget(key).convert().intoList();
     }
@@ -129,7 +124,6 @@ public class DynamicConfig {
     public int getInt(String key) throws RuntimeException {
         return dget(key).convert().intoInteger();
     }
-    @SuppressWarnings("unchecked")
     public List<Integer> getIntList(String key) throws RuntimeException {
         return (List<Integer>) dget(key).convert().intoList();
     }
@@ -137,7 +131,6 @@ public class DynamicConfig {
     public long getLong(String key) throws RuntimeException {
         return dget(key).convert().intoLong();
     }
-    @SuppressWarnings("unchecked")
     public List<Long> getLongList(String key) throws RuntimeException {
         return (List<Long>) dget(key).convert().intoList();
     }
@@ -145,7 +138,6 @@ public class DynamicConfig {
     public double getDouble(String key) throws RuntimeException {
         return dget(key).convert().intoDouble();
     }
-    @SuppressWarnings("unchecked")
     public List<Double> getDoubleList(String key) throws RuntimeException {
         return (List<Double>) dget(key).convert().intoList();
     }
@@ -153,7 +145,6 @@ public class DynamicConfig {
     public BigDecimal getDecimal(String key) throws RuntimeException {
         return dget(key).convert().intoDecimal();
     }
-    @SuppressWarnings("unchecked")
     public List<BigDecimal> getDecimalList(String key) throws RuntimeException {
         return (List<BigDecimal>) dget(key).convert().intoList();
     }
