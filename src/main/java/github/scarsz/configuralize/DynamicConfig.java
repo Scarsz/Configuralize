@@ -102,7 +102,7 @@ public class DynamicConfig {
     public <K, V> Map<K, V> getMap(String key) throws RuntimeException {
         return (Map<K, V>) dget(key).convert().intoMap();
     }
-    public <K, V> Optional<Map<K, V>> getOptionalMap(String key) throws RuntimeException {
+    public <K, V> Optional<Map<K, V>> getOptionalMap(String key) {
         try {
             return Optional.ofNullable(getMap(key));
         } catch (Exception e) {
@@ -120,7 +120,7 @@ public class DynamicConfig {
     public <T> List<T> getList(String key) throws RuntimeException {
         return (List<T>) dget(key).convert().intoList();
     }
-    public <T> Optional<List<T>> getOptionalList(String key) throws RuntimeException {
+    public <T> Optional<List<T>> getOptionalList(String key) {
         try {
             return Optional.ofNullable(
                     getList(key)
@@ -140,7 +140,7 @@ public class DynamicConfig {
     public String getString(String key) throws RuntimeException {
         return dget(key).convert().intoString();
     }
-    public Optional<String> getOptionalString(String key) throws RuntimeException {
+    public Optional<String> getOptionalString(String key) {
         try {
             return Optional.ofNullable(getString(key));
         } catch (Exception e) {
@@ -158,7 +158,7 @@ public class DynamicConfig {
     public List<String> getStringList(String key) throws RuntimeException {
         return (List<String>) dget(key).convert().intoList();
     }
-    public Optional<List<String>> getOptionalStringList(String key) throws RuntimeException {
+    public Optional<List<String>> getOptionalStringList(String key) {
         try {
             return Optional.ofNullable(getStringList(key));
         } catch (Exception e) {
@@ -208,7 +208,7 @@ public class DynamicConfig {
     public List<Boolean> getBooleanList(String key) throws RuntimeException {
         return (List<Boolean>) dget(key).convert().intoList();
     }
-    public Optional<List<Boolean>> getOptionalBooleanList(String key) throws RuntimeException {
+    public Optional<List<Boolean>> getOptionalBooleanList(String key) {
         try {
             return Optional.ofNullable(getBooleanList(key));
         } catch (Exception e) {
@@ -226,7 +226,7 @@ public class DynamicConfig {
     public int getInt(String key) throws RuntimeException {
         return dget(key).convert().intoInteger();
     }
-    public Optional<Integer> getOptionalInt(String key) throws RuntimeException {
+    public Optional<Integer> getOptionalInt(String key) {
         try {
             return Optional.of(getInt(key));
         } catch (Exception e) {
@@ -244,7 +244,7 @@ public class DynamicConfig {
     public List<Integer> getIntList(String key) throws RuntimeException {
         return (List<Integer>) dget(key).convert().intoList();
     }
-    public Optional<List<Integer>> getOptionalIntList(String key) throws RuntimeException {
+    public Optional<List<Integer>> getOptionalIntList(String key) {
         try {
             return Optional.ofNullable(getIntList(key));
         } catch (Exception e) {
@@ -262,7 +262,7 @@ public class DynamicConfig {
     public long getLong(String key) throws RuntimeException {
         return dget(key).convert().intoLong();
     }
-    public Optional<Long> getOptionalLong(String key) throws RuntimeException {
+    public Optional<Long> getOptionalLong(String key) {
         try {
             return Optional.of(getLong(key));
         } catch (Exception e) {
@@ -280,7 +280,7 @@ public class DynamicConfig {
     public List<Long> getLongList(String key) throws RuntimeException {
         return (List<Long>) dget(key).convert().intoList();
     }
-    public Optional<List<Long>> getOptionalLongList(String key) throws RuntimeException {
+    public Optional<List<Long>> getOptionalLongList(String key) {
         try {
             return Optional.ofNullable(getLongList(key));
         } catch (Exception e) {
@@ -298,7 +298,7 @@ public class DynamicConfig {
     public double getDouble(String key) throws RuntimeException {
         return dget(key).convert().intoDouble();
     }
-    public Optional<Double> getOptionalDouble(String key) throws RuntimeException {
+    public Optional<Double> getOptionalDouble(String key) {
         try {
             return Optional.of(getDouble(key));
         } catch (Exception e) {
@@ -316,7 +316,7 @@ public class DynamicConfig {
     public List<Double> getDoubleList(String key) throws RuntimeException {
         return (List<Double>) dget(key).convert().intoList();
     }
-    public Optional<List<Double>> getOptionalDoubleList(String key) throws RuntimeException {
+    public Optional<List<Double>> getOptionalDoubleList(String key) {
         try {
             return Optional.ofNullable(getDoubleList(key));
         } catch (Exception e) {
@@ -334,7 +334,7 @@ public class DynamicConfig {
     public BigDecimal getDecimal(String key) throws RuntimeException {
         return dget(key).convert().intoDecimal();
     }
-    public Optional<BigDecimal> getOptionalDecimal(String key) throws RuntimeException {
+    public Optional<BigDecimal> getOptionalDecimal(String key) {
         try {
             return Optional.ofNullable(getDecimal(key));
         } catch (Exception e) {
@@ -352,7 +352,7 @@ public class DynamicConfig {
     public List<BigDecimal> getDecimalList(String key) throws RuntimeException {
         return (List<BigDecimal>) dget(key).convert().intoList();
     }
-    public Optional<List<BigDecimal>> getOptionalDecimalList(String key) throws RuntimeException {
+    public Optional<List<BigDecimal>> getOptionalDecimalList(String key) {
         try {
             return Optional.ofNullable(getDecimalList(key));
         } catch (Exception e) {
