@@ -84,20 +84,93 @@ public class DynamicConfig {
     public <T> T get(String key) throws RuntimeException {
         return (T) dget(key).asObject();
     }
+    public <T> Optional<T> getOptional(String key) {
+        try {
+            return Optional.ofNullable(get(key));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+    public <T> T getElse(String key, T otherwise) {
+        try {
+            return get(key);
+        } catch (Exception e) {
+            return otherwise;
+        }
+    }
 
     public <K, V> Map<K, V> getMap(String key) throws RuntimeException {
         return (Map<K, V>) dget(key).convert().intoMap();
+    }
+    public <K, V> Optional<Map<K, V>> getOptionalMap(String key) throws RuntimeException {
+        try {
+            return Optional.ofNullable(getMap(key));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+    public <K, V> Map<K, V> getMapElse(String key, Map<K, V> otherwise) {
+        try {
+            return getMap(key);
+        } catch (Exception e) {
+            return otherwise;
+        }
     }
 
     public <T> List<T> getList(String key) throws RuntimeException {
         return (List<T>) dget(key).convert().intoList();
     }
+    public <T> Optional<List<T>> getOptionalList(String key) throws RuntimeException {
+        try {
+            return Optional.ofNullable(
+                    getList(key)
+            );
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+    public <T> List<T> getListElse(String key, List<T> otherwise) {
+        try {
+            return getList(key);
+        } catch (Exception e) {
+            return otherwise;
+        }
+    }
 
     public String getString(String key) throws RuntimeException {
         return dget(key).convert().intoString();
     }
+    public Optional<String> getOptionalString(String key) throws RuntimeException {
+        try {
+            return Optional.ofNullable(getString(key));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+    public String getStringElse(String key, String otherwise) {
+        try {
+            return getString(key);
+        } catch (Exception e) {
+            return otherwise;
+        }
+    }
+
     public List<String> getStringList(String key) throws RuntimeException {
         return (List<String>) dget(key).convert().intoList();
+    }
+    public Optional<List<String>> getOptionalStringList(String key) throws RuntimeException {
+        try {
+            return Optional.ofNullable(getStringList(key));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+    public List<String> getStringListElse(String key, List<String> otherwise) {
+        try {
+            return getStringList(key);
+        } catch (Exception e) {
+            return otherwise;
+        }
     }
 
     public boolean getBoolean(String key) throws RuntimeException {
@@ -117,36 +190,181 @@ public class DynamicConfig {
                 throw new RuntimeException("Can't convert key " + key + " value \"" + value + "\" to boolean");
         }
     }
+    public Optional<Boolean> getOptionalBoolean(String key) {
+        try {
+            return Optional.of(getBoolean(key));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+    public boolean getBooleanElse(String key, boolean otherwise) {
+        try {
+            return getBoolean(key);
+        } catch (Exception e) {
+            return otherwise;
+        }
+    }
+
     public List<Boolean> getBooleanList(String key) throws RuntimeException {
         return (List<Boolean>) dget(key).convert().intoList();
+    }
+    public Optional<List<Boolean>> getOptionalBooleanList(String key) throws RuntimeException {
+        try {
+            return Optional.ofNullable(getBooleanList(key));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+    public List<Boolean> getBooleanListElse(String key, List<Boolean> otherwise) {
+        try {
+            return getBooleanList(key);
+        } catch (Exception e) {
+            return otherwise;
+        }
     }
 
     public int getInt(String key) throws RuntimeException {
         return dget(key).convert().intoInteger();
     }
+    public Optional<Integer> getOptionalInt(String key) throws RuntimeException {
+        try {
+            return Optional.of(getInt(key));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+    public int getIntElse(String key, int otherwise) {
+        try {
+            return getInt(key);
+        } catch (Exception e) {
+            return otherwise;
+        }
+    }
+
     public List<Integer> getIntList(String key) throws RuntimeException {
         return (List<Integer>) dget(key).convert().intoList();
+    }
+    public Optional<List<Integer>> getOptionalIntList(String key) throws RuntimeException {
+        try {
+            return Optional.ofNullable(getIntList(key));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+    public List<Integer> getIntListElse(String key, List<Integer> otherwise) {
+        try {
+            return getIntList(key);
+        } catch (Exception e) {
+            return otherwise;
+        }
     }
 
     public long getLong(String key) throws RuntimeException {
         return dget(key).convert().intoLong();
     }
+    public Optional<Long> getOptionalLong(String key) throws RuntimeException {
+        try {
+            return Optional.of(getLong(key));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+    public long getLongElse(String key, long otherwise) {
+        try {
+            return getLong(key);
+        } catch (Exception e) {
+            return otherwise;
+        }
+    }
+
     public List<Long> getLongList(String key) throws RuntimeException {
         return (List<Long>) dget(key).convert().intoList();
+    }
+    public Optional<List<Long>> getOptionalLongList(String key) throws RuntimeException {
+        try {
+            return Optional.ofNullable(getLongList(key));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+    public List<Long> getLongListElse(String key, List<Long> otherwise) {
+        try {
+            return getLongList(key);
+        } catch (Exception e) {
+            return otherwise;
+        }
     }
 
     public double getDouble(String key) throws RuntimeException {
         return dget(key).convert().intoDouble();
     }
+    public Optional<Double> getOptionalDouble(String key) throws RuntimeException {
+        try {
+            return Optional.of(getDouble(key));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+    public double getDoubleElse(String key, double otherwise) {
+        try {
+            return getDouble(key);
+        } catch (Exception e) {
+            return otherwise;
+        }
+    }
+
     public List<Double> getDoubleList(String key) throws RuntimeException {
         return (List<Double>) dget(key).convert().intoList();
+    }
+    public Optional<List<Double>> getOptionalDoubleList(String key) throws RuntimeException {
+        try {
+            return Optional.ofNullable(getDoubleList(key));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+    public List<Double> getDoubleListElse(String key, List<Double> otherwise) {
+        try {
+            return getDoubleList(key);
+        } catch (Exception e) {
+            return otherwise;
+        }
     }
 
     public BigDecimal getDecimal(String key) throws RuntimeException {
         return dget(key).convert().intoDecimal();
     }
+    public Optional<BigDecimal> getOptionalDecimal(String key) throws RuntimeException {
+        try {
+            return Optional.ofNullable(getDecimal(key));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+    public BigDecimal getDecimalElse(String key, BigDecimal otherwise) {
+        try {
+            return getDecimal(key);
+        } catch (Exception e) {
+            return otherwise;
+        }
+    }
+
     public List<BigDecimal> getDecimalList(String key) throws RuntimeException {
         return (List<BigDecimal>) dget(key).convert().intoList();
+    }
+    public Optional<List<BigDecimal>> getOptionalDecimalList(String key) throws RuntimeException {
+        try {
+            return Optional.ofNullable(getDecimalList(key));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+    public List<BigDecimal> getDecimalListElse(String key, List<BigDecimal> otherwise) {
+        try {
+            return getDecimalList(key);
+        } catch (Exception e) {
+            return otherwise;
+        }
     }
 
     public <T> T getSilent(String key) {
