@@ -191,18 +191,11 @@ public class DynamicConfig {
     public Map<Source, Provider> getSources() {
         return sources;
     }
-
-    /**
-     * Get the {@link Dynamic} value from the source matching the given resource name
-     * @param source the resource name to filter the sources by
-     * @return the values of the source's provider
-     */
-    public Dynamic getValues(String source) {
+    public Provider getProvider(String resource) {
         return sources.entrySet().stream()
-                .filter(entry -> entry.getKey().getResourceName().equals(source))
+                .filter(entry -> entry.getKey().getResourceName().equals(resource))
                 .map(Map.Entry::getValue)
-                .map(Provider::getValues)
-                .findFirst().orElse(null);
+                .findFirst().orElseThrow(() -> new IllegalArgumentException("Invalid resource " + resource));
     }
 
 }
