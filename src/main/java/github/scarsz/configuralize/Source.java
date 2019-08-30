@@ -11,7 +11,7 @@ public class Source {
     public Source(Class clazz, String resource, File file) {
         this.clazz = clazz;
         this.resource = resource;
-        this.file = file;
+        this.file = file.getAbsoluteFile();
     }
 
     public String getLocalizedResource() {
