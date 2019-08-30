@@ -64,6 +64,10 @@ public class Provider {
 
     public void saveDefaults(boolean overwrite) throws IOException {
         if (source.getFile().exists() && !overwrite) return;
+        if (!source.getFile().getParentFile().exists() && !source.getFile().getParentFile().mkdirs()) {
+            throw new IOException("Failed to create directory " + source.getFile().getParentFile().getAbsolutePath());
+        }
+
         String resource = source.getLocalizedResource(config.getLanguage());
         InputStream stream = source.getClazz().getResourceAsStream(resource);
         Files.copy(Objects.requireNonNull(stream), source.getFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
