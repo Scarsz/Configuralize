@@ -1,24 +1,30 @@
 package github.scarsz.configuralize;
 
 import alexh.weak.Dynamic;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.yaml.snakeyaml.parser.ParserException;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.util.*;
-import java.util.regex.Pattern;
+import java.util.Map;
+import java.util.Objects;
 
-@SuppressWarnings("SameParameterValue")
+@SuppressWarnings({"SameParameterValue", "WeakerAccess"})
 public class Provider {
 
-    public static Dynamic load(DynamicConfig config, Source source, String raw) throws ParseException {
+    private static Dynamic load(DynamicConfig config, Source source, String raw) throws ParseException {
+        if (raw == null) throw new IllegalArgumentException("can't load null config");
+
         Map parsed;
         String extension = source.getFile().getName().substring(source.getFile().getName().lastIndexOf(".") + 1);
         try {
             if (extension.equalsIgnoreCase("yml")) {
+//                String cleaned = Arrays.stream(raw.split("\n"))
+//                        .filter(s -> !s.startsWith("#"))
+//                        .filter(s -> !s.trim().isEmpty())
+//                        .collect(Collectors.joining("\n"));
                 parsed = config.getYamlParser().loadAs(raw, Map.class);
             } else if (extension.equalsIgnoreCase("json")) {
                 parsed = (Map) config.getJsonParser().parse(raw);
@@ -47,14 +53,13 @@ public class Provider {
     }
 
     public Dynamic loadValues() throws ParseException, IOException {
-        return load(config, source, new String(Files.readAllBytes(source.getFile().toPath())));
+        return load(config, source, FileUtils.readFileToString(source.getFile(), "UTF-8"));
     }
 
     public Dynamic loadResource() throws ParseException, IOException {
-        InputStream stream = source.getClazz().getResource(source.getLocalizedResource(config.getLanguage())).openStream();
-        if (stream == null) throw new IllegalArgumentException("Unknown resource " + source.getLocalizedResource(config.getLanguage()));
-        try (Scanner scanner = new Scanner(stream, StandardCharsets.UTF_8.name()).useDelimiter(Pattern.compile("\\Z"))) {
-            return load(config, source, scanner.next());
+        try (InputStream stream = source.getClazz().getResource(source.getLocalizedResource(config.getLanguage())).openStream()) {
+            Objects.requireNonNull(stream, "Unknown resource " + source.getLocalizedResource(config.getLanguage()));
+            return load(config, source, IOUtils.toString(stream, StandardCharsets.UTF_8));
         }
     }
 
@@ -69,9 +74,10 @@ public class Provider {
         }
 
         String resource = source.getLocalizedResource(config.getLanguage());
-        InputStream stream = source.getClazz().getResourceAsStream(resource);
-        Files.copy(Objects.requireNonNull(stream), source.getFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
-        stream.close();
+        try (InputStream stream = source.getClazz().getResourceAsStream(resource)) {
+            Objects.requireNonNull(stream, "Unknown resource " + source.getLocalizedResource(config.getLanguage()));
+            FileUtils.copyInputStreamToFile(stream, source.getFile());
+        }
     }
 
     public DynamicConfig getConfig() {
