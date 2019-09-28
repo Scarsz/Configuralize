@@ -6,7 +6,7 @@
 
     <groupId>github.scarsz</groupId>
     <artifactId>configuralize</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
 
     <build>
         <finalName>Configuralize-${project.version}</finalName>
