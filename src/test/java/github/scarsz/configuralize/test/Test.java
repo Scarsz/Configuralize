@@ -17,8 +17,8 @@ public class Test {
     @Before
     public void setUp() throws Exception {
         config = new DynamicConfig();
-        config.addSource(new Source(Test.class, "config", new File("config.yml")));
-        config.addSource(new Source(Test.class, "messages", new File("messages.yml")));
+        config.addSource(Test.class, "config", new File("config.yml"));
+        config.addSource(Test.class, "messages", new File("messages.yml"));
     }
 
     @org.junit.Test
