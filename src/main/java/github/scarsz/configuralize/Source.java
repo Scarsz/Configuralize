@@ -4,18 +4,20 @@ import java.io.File;
 
 public class Source {
 
+    private final DynamicConfig config;
     private final Class clazz;
     private final String resource;
     private final File file;
 
-    public Source(Class clazz, String resource, File file) {
+    public Source(DynamicConfig config, Class clazz, String resource, File file) {
+        this.config = config;
         this.clazz = clazz;
         this.resource = resource;
         this.file = file.getAbsoluteFile();
     }
 
     public String getLocalizedResource() {
-        return getLocalizedResource(Language.EN);
+        return getLocalizedResource(config.getLanguage());
     }
 
     public String getLocalizedResource(Language language) {
