@@ -57,8 +57,8 @@ public class Provider {
     }
 
     public Dynamic loadResource() throws ParseException, IOException {
-        try (InputStream stream = source.getClazz().getResource(source.getLocalizedResource(config.getLanguage())).openStream()) {
-            Objects.requireNonNull(stream, "Unknown resource " + source.getLocalizedResource(config.getLanguage()));
+        try (InputStream stream = source.getResource().openStream()) {
+            Objects.requireNonNull(stream, "Unknown resource " + source.getResourcePath(config.getLanguage()));
             return load(config, source, IOUtils.toString(stream, StandardCharsets.UTF_8));
         }
     }
@@ -73,9 +73,9 @@ public class Provider {
             throw new IOException("Failed to create directory " + source.getFile().getParentFile().getAbsolutePath());
         }
 
-        String resource = source.getLocalizedResource(config.getLanguage());
-        try (InputStream stream = source.getClazz().getResourceAsStream(resource)) {
-            Objects.requireNonNull(stream, "Unknown resource " + source.getLocalizedResource(config.getLanguage()));
+        String resource = source.getResourcePath(config.getLanguage());
+        try (InputStream stream = source.getResource().openStream()) {
+            Objects.requireNonNull(stream, "Unknown resource " + source.getResourcePath(config.getLanguage()));
             FileUtils.copyInputStreamToFile(stream, source.getFile());
         }
     }
