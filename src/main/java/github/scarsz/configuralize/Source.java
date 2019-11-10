@@ -24,6 +24,14 @@ public class Source {
         return "/" + resource + "/" + language.getCode().toLowerCase() + "." + file.getName().substring(file.getName().lastIndexOf(".") + 1);
     }
 
+    public URL getResource() {
+        return getResource(config.getLanguage());
+    }
+
+    public URL getResource(Language language) {
+        return clazz.getResource(getResourcePath(language));
+    }
+
     public String getResourceName() {
         return resource;
     }
