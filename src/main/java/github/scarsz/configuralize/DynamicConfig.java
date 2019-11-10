@@ -28,6 +28,21 @@ public class DynamicConfig {
     }
 
     /**
+     * Checks whether or not the current language has translated files for all sources
+     */
+    public boolean isLanguageAvailable() {
+        return isLanguageAvailable(language);
+    }
+
+    /**
+     * Checks whether or not the given language has translated files for all sources
+     * @param language The language to check for translations
+     */
+    public boolean isLanguageAvailable(Language language) {
+        return sources.keySet().stream().allMatch(source -> source.isLanguageAvailable(language));
+    }
+
+    /**
      * Add the given source to the dynamic config
      * @param source The source to add
      * @return true if this source wasn't already in the dynamic config
