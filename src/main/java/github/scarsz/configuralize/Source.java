@@ -16,11 +16,11 @@ public class Source {
         this.file = file.getAbsoluteFile();
     }
 
-    public String getLocalizedResource() {
-        return getLocalizedResource(config.getLanguage());
+    public String getResourcePath() {
+        return getResourcePath(config.getLanguage());
     }
 
-    public String getLocalizedResource(Language language) {
+    public String getResourcePath(Language language) {
         return "/" + resource + "/" + language.getCode().toLowerCase() + "." + file.getName().substring(file.getName().lastIndexOf(".") + 1);
     }
 
