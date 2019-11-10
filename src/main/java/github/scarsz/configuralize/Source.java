@@ -1,6 +1,9 @@
 package github.scarsz.configuralize;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 public class Source {
 
@@ -34,6 +37,20 @@ public class Source {
 
     public String getResourceName() {
         return resource;
+    }
+
+    public boolean isLanguageAvailable() {
+        return isLanguageAvailable(config.getLanguage());
+    }
+
+    public boolean isLanguageAvailable(Language language) {
+        try {
+            InputStream stream = getResource(language).openStream();
+            stream.close();
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     public File getFile() {
