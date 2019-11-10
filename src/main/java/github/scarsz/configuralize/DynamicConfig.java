@@ -5,6 +5,7 @@ import alexh.weak.Weak;
 import org.json.simple.parser.JSONParser;
 import org.yaml.snakeyaml.Yaml;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
@@ -32,6 +33,18 @@ public class DynamicConfig {
      * @return true if this source wasn't already in the dynamic config
      */
     public boolean addSource(Source source) {
+        return sources.put(source, new Provider(this, source)) == null;
+    }
+
+    /**
+     * Add the given source to the dynamic config
+     * @param clazz The class that should provide the resource
+     * @param resource The name of the resource, i.e. "config" in /resources/config/en.yml
+     * @param file The file that should provide this source
+     * @return true if this source wasn't already in the dynamic config
+     */
+    public boolean addSource(Class clazz, String resource, File file) {
+        Source source = new Source(this, clazz, resource, file);
         return sources.put(source, new Provider(this, source)) == null;
     }
 
