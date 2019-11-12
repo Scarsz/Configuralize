@@ -1,7 +1,6 @@
 package github.scarsz.configuralize;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
@@ -48,7 +47,7 @@ public class Source {
             InputStream stream = getResource(language).openStream();
             stream.close();
             return true;
-        } catch (IOException e) {
+        } catch (Exception e) {
             return false;
         }
     }
