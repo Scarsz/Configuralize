@@ -101,7 +101,9 @@ public class DynamicConfig {
         if (runtimeValues.containsKey(key)) return Dynamic.from(runtimeValues.get(key));
         return sources.values().stream()
                 .filter(Objects::nonNull)
+                .filter(provider -> provider.getValues() != null)
                 .map(provider -> provider.getValues().dget(key))
+                .filter(Objects::nonNull)
                 .filter(Weak::isPresent)
                 .findFirst().orElseGet(() -> sources.values().stream()
                         .map(provider -> provider.getDefaults().dget(key))
