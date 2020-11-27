@@ -2,6 +2,20 @@
 A config library that doesn't waste your time. Built-in internationalization.
 Supports *.yml files via SnakeYAML and .json files via json-simple.
 
+# Dependency information
+```xml
+<repository>
+    <id>scarsz</id>
+    <url>https://nexus.scarsz.me/content/groups/public/</url>
+</repository>
+
+<dependency>
+    <groupId>github.scarsz</groupId>
+    <artifactId>configuralize</artifactId>
+    <version>1.3.1</version>
+</dependency>
+```
+
 # Example usage
 Files are defined as their own folder in resources. In the below example,
 the `config` and `messages` config resources have `en`, English; `fr`, French;
