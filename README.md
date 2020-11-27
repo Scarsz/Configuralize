@@ -1,6 +1,6 @@
 # Configuralize
 A config library that doesn't waste your time. Built-in internationalization.
-Supports *.yml files via SnakeYAML and .json files via json-simple.
+Supports .yml files via SnakeYAML and .json files via json-simple.
 
 # Dependency information
 ```xml
