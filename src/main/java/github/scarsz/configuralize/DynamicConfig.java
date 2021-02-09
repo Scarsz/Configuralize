@@ -18,11 +18,10 @@ public class DynamicConfig {
     private final Map<String, Object> runtimeValues = new HashMap<>();
     private Language language;
 
-    public DynamicConfig(Source... sources) {
-        this(Language.EN, sources);
+    public DynamicConfig() {
+        this(Language.EN);
     }
-
-    public DynamicConfig(Language language, Source... sources) {
+    public DynamicConfig(Language language) {
         this.language = language;
         Arrays.stream(sources).forEach(this::addSource);
     }
