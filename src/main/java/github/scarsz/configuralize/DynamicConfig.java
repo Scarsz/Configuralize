@@ -2,11 +2,15 @@ package github.scarsz.configuralize;
 
 import alexh.weak.Dynamic;
 import alexh.weak.Weak;
+import github.scarsz.configuralize.mapping.MappingFunction;
+import github.scarsz.configuralize.mapping.Option;
 import org.json.simple.parser.JSONParser;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Consumer;
@@ -57,7 +61,7 @@ public class DynamicConfig {
      * @param file The file that should provide this source
      * @return true if this source wasn't already in the dynamic config
      */
-    public boolean addSource(Class clazz, String resource, File file) {
+    public boolean addSource(Class<?> clazz, String resource, File file) {
         Source source = new Source(this, clazz, resource, file);
         return sources.put(source, new Provider(this, source)) == null;
     }
@@ -93,6 +97,111 @@ public class DynamicConfig {
     public void loadAll() throws IOException, ParseException {
         for (Map.Entry<Source, Provider> source : this.sources.entrySet()) {
             source.getValue().load();
+        }
+    }
+
+    /**
+     * Map this config's values to the target class's static fields
+     * @param targetClass the class to map values to
+     * @param mappings mapping functions to use when mapping values to the appropriate type
+     */
+    public void map(Class<?> targetClass, MappingFunction<?>... mappings) {
+        map(targetClass, Arrays.asList(mappings));
+    }
+    /**
+     * Map this config's values to the target class's static fields marked with {@link Option}
+     * @param targetClass the class to map values to
+     * @param mappings mapping functions to use when mapping values to the appropriate type
+     */
+    public void map(Class<?> targetClass, List<MappingFunction<?>> mappings) {
+        mapFields(targetClass, null, mappings);
+        for (Class<?> declared : targetClass.getDeclaredClasses()) {
+            map(declared, mappings);
+        }
+    }
+
+    /**
+     * Map this config's values to the given object's instance fields marked with {@link Option}
+     * @param object the class to map values to
+     * @param mappings mapping functions to use when mapping values to the appropriate type
+     */
+    public void map(Object object, MappingFunction<?>... mappings) {
+        map(object, Arrays.asList(mappings));
+    }
+    /**
+     * Map this config's values to the given object's instance fields marked with {@link Option}
+     * @param object the class to map values to
+     * @param mappings mapping functions to use when mapping values to the appropriate type
+     */
+    public void map(Object object, List<MappingFunction<?>> mappings) {
+        mapFields(object.getClass(), object, mappings);
+        for (Class<?> declared : object.getClass().getDeclaredClasses()) {
+            map(declared, mappings);
+        }
+    }
+
+    /**
+     * Iterate over the given class's declared fields, setting fields marked with {@link Option} to the option value
+     * @param clazz the class to iterate fields for
+     * @param instance the instance to set values on, null will set fields statically instead
+     * @param mappings mapping functions to use when mapping values to the appropriate type
+     */
+    private void mapFields(Class<?> clazz, Object instance, List<MappingFunction<?>> mappings) {
+        for (Field field : clazz.getDeclaredFields()) {
+            if (instance == null && !Modifier.isStatic(field.getModifiers())) {
+                // we can only set static values because we don't have an instance
+                continue;
+            }
+
+            if (!field.isAnnotationPresent(Option.class)) continue;
+
+            Option fieldAnnotation = field.getAnnotation(Option.class);
+            String key = fieldAnnotation.key();
+
+            if (!field.isAccessible()) {
+                field.setAccessible(true);
+            }
+
+            boolean valueExists = Modifier.isFinal(field.getModifiers());
+            if (valueExists) {
+                try {
+                    Field modifiersField = Field.class.getDeclaredField("modifiers");
+                    modifiersField.setAccessible(true);
+                    modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+                } catch (IllegalAccessException | NoSuchFieldException e) {
+                    throw new RuntimeException("Failed to reflectively set field " + field + " to non-final", e);
+                }
+            }
+
+            try {
+                Object value;
+                Dynamic dynamic = dgetSilent(key);
+                MappingFunction<?> mappingFunction = mappings != null
+                        ? mappings.stream().filter(mf -> mf.getKey().equals(key)).findFirst().orElse(null)
+                        : null;
+
+                if (mappingFunction != null) {
+                    value = mappingFunction.getFunction().apply(dynamic);
+                } else {
+                    switch (field.getType().getName().toLowerCase()) {
+                        case "int":
+                        case "integer":
+                            value = dynamic.convert().intoInteger();
+                            break;
+                        case "double":
+                            value = dynamic.convert().intoDouble();
+                            break;
+                        default:
+                            value = dynamic.asObject();
+                            break;
+                    }
+                }
+                field.set(instance, value);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException("Field " + field + " is not accessible");
+            } catch (Throwable e) {
+                throw new RuntimeException("Failed to map key " + key, e);
+            }
         }
     }
 

@@ -1,1 +1,8 @@
 config key: value from config
+config int: 1
+config double: 1.0
+integer disguised as string: "1"
+
+more config keys:
+  inner: inner value
+  inner string disguised as integer: 1

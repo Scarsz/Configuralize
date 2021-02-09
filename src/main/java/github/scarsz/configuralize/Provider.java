@@ -15,19 +15,15 @@ import java.util.Objects;
 public class Provider {
 
     private static Dynamic load(DynamicConfig config, Source source, String raw) throws ParseException {
-        if (raw == null) throw new IllegalArgumentException("can't load null config");
+        if (raw == null) throw new IllegalArgumentException("Can't load null config");
 
-        Map parsed;
+        Map<?, ?> parsed;
         String extension = source.getFile().getName().substring(source.getFile().getName().lastIndexOf(".") + 1);
         try {
             if (extension.equalsIgnoreCase("yml")) {
-//                String cleaned = Arrays.stream(raw.split("\n"))
-//                        .filter(s -> !s.startsWith("#"))
-//                        .filter(s -> !s.trim().isEmpty())
-//                        .collect(Collectors.joining("\n"));
                 parsed = config.getYamlParser().loadAs(raw, Map.class);
             } else if (extension.equalsIgnoreCase("json")) {
-                parsed = (Map) config.getJsonParser().parse(raw);
+                parsed = (Map<?, ?>) config.getJsonParser().parse(raw);
             } else {
                 throw new IllegalArgumentException("Config source extension " + extension + " is not supported");
             }
@@ -51,11 +47,9 @@ public class Provider {
         this.defaults = loadResource();
         this.values = loadValues();
     }
-
     public Dynamic loadValues() throws ParseException, IOException {
         return load(config, source, FileUtils.readFileToString(source.getFile(), "UTF-8"));
     }
-
     public Dynamic loadResource() throws ParseException, IOException {
         try (InputStream stream = source.getResource().openStream()) {
             Objects.requireNonNull(stream, "Unknown resource " + source.getResourcePath(config.getLanguage()));
@@ -66,7 +60,6 @@ public class Provider {
     public void saveDefaults() throws IOException {
         saveDefaults(false);
     }
-
     public void saveDefaults(boolean overwrite) throws IOException {
         if (source.getFile().exists() && !overwrite) return;
         if (!source.getFile().getParentFile().exists() && !source.getFile().getParentFile().mkdirs()) {
@@ -83,15 +76,12 @@ public class Provider {
     public DynamicConfig getConfig() {
         return config;
     }
-
     public Source getSource() {
         return source;
     }
-
     public Dynamic getDefaults() {
         return defaults;
     }
-
     public Dynamic getValues() {
         return values;
     }

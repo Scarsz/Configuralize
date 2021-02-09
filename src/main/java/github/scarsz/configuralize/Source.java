@@ -7,11 +7,11 @@ import java.net.URL;
 public class Source {
 
     private final DynamicConfig config;
-    private final Class clazz;
+    private final Class<?> clazz;
     private final String resource;
     private final File file;
 
-    public Source(DynamicConfig config, Class clazz, String resource, File file) {
+    public Source(DynamicConfig config, Class<?> clazz, String resource, File file) {
         this.config = config;
         this.clazz = clazz;
         this.resource = resource;
@@ -56,7 +56,7 @@ public class Source {
         return file;
     }
 
-    public Class getClazz() {
+    public Class<?> getClazz() {
         return this.clazz;
     }
 
