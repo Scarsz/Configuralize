@@ -406,11 +406,12 @@ public class DynamicConfig {
     public void getSilent(String key, Consumer<Dynamic> success) {
         getSilent(key, success, null);
     }
-    public void getSilent(String key, Consumer<Dynamic> success, Consumer<Dynamic> failure) {
+    public void getSilent(String key, Consumer<Dynamic> success, Runnable failure) {
         try {
-            if (success != null) success.accept(dget(key));
+            Dynamic dynamic = dget(key);
+            if (success != null) success.accept(dynamic);
         } catch (IllegalArgumentException e) {
-            if (failure != null) failure.accept(dget(key));
+            if (failure != null) failure.run();
         }
     }
 
