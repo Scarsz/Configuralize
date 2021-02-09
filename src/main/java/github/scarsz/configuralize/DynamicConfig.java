@@ -109,6 +109,13 @@ public class DynamicConfig {
                         .filter(Weak::isPresent)
                         .findFirst().orElseThrow(() -> new IllegalArgumentException("Invalid key: " + key)));
     }
+    public Dynamic dgetSilent(String key) {
+        try {
+            return dget(key);
+        } catch (IllegalArgumentException e) {
+            return Dynamic.from(null);
+        }
+    }
 
     public <T> T get(String key) throws RuntimeException {
         return (T) dget(key).asObject();
