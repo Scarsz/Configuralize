@@ -100,7 +100,7 @@ public class DynamicConfig {
     }
 
     /**
-     * Map this config's values to the target class's static fields
+     * Map this config's values to the target class's static fields marked with {@link Option}
      * @param targetClass the class to map values to
      * @param mappings mapping functions to use when mapping values to the appropriate type
      */
@@ -113,47 +113,22 @@ public class DynamicConfig {
      * @param mappings mapping functions to use when mapping values to the appropriate type
      */
     public void map(Class<?> targetClass, List<MappingFunction<?>> mappings) {
-        mapFields(targetClass, null, mappings);
+        mapFields(targetClass, mappings);
         for (Class<?> declared : targetClass.getDeclaredClasses()) {
             map(declared, mappings);
         }
     }
 
     /**
-     * Map this config's values to the given object's instance fields marked with {@link Option}
-     * @param object the class to map values to
-     * @param mappings mapping functions to use when mapping values to the appropriate type
-     */
-    public void map(Object object, MappingFunction<?>... mappings) {
-        map(object, Arrays.asList(mappings));
-    }
-    /**
-     * Map this config's values to the given object's instance fields marked with {@link Option}
-     * @param object the class to map values to
-     * @param mappings mapping functions to use when mapping values to the appropriate type
-     */
-    public void map(Object object, List<MappingFunction<?>> mappings) {
-        mapFields(object.getClass(), object, mappings);
-        for (Class<?> declared : object.getClass().getDeclaredClasses()) {
-            map(declared, mappings);
-        }
-    }
-
-    /**
-     * Iterate over the given class's declared fields, setting fields marked with {@link Option} to the option value
+     * Iterate over the given class's declared static fields, setting fields marked with {@link Option} to the option value
      * @param clazz the class to iterate fields for
-     * @param instance the instance to set values on, null will set fields statically instead
      * @param mappings mapping functions to use when mapping values to the appropriate type
      */
-    private void mapFields(Class<?> clazz, Object instance, List<MappingFunction<?>> mappings) {
+    private void mapFields(Class<?> clazz, List<MappingFunction<?>> mappings) {
         for (Field field : clazz.getDeclaredFields()) {
-            if (instance == null && !Modifier.isStatic(field.getModifiers())) {
-                // we can only set static values because we don't have an instance
-                continue;
-            }
+            if (!Modifier.isStatic(field.getModifiers())) continue;
 
             if (!field.isAnnotationPresent(Option.class)) continue;
-
             Option fieldAnnotation = field.getAnnotation(Option.class);
             String key = fieldAnnotation.key();
 
@@ -195,7 +170,7 @@ public class DynamicConfig {
                             break;
                     }
                 }
-                field.set(instance, value);
+                field.set(null, value);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException("Field " + field + " is not accessible");
             } catch (Throwable e) {
