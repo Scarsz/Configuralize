@@ -100,6 +100,21 @@ public class DynamicConfig {
     }
 
     /**
+     * Map this config's values to this config's static fields marked with {@link Option}
+     * @param mappingFunctions mapping functions to use when mapping values to the appropriate type
+     */
+    public void map(MappingFunction<?>... mappingFunctions) {
+        map(this.getClass(), mappingFunctions);
+    }
+    /**
+     * Map this config's values to this config's static fields marked with {@link Option}
+     * @param mappingFunctions mapping functions to use when mapping values to the appropriate type
+     */
+    public void map(List<MappingFunction<?>> mappingFunctions) {
+        map(this.getClass(), mappingFunctions);
+    }
+
+    /**
      * Map this config's values to the target class's static fields marked with {@link Option}
      * @param targetClass the class to map values to
      * @param mappings mapping functions to use when mapping values to the appropriate type
