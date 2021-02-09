@@ -12,7 +12,7 @@ Supports .yml files via SnakeYAML and .json files via json-simple.
 <dependency>
     <groupId>github.scarsz</groupId>
     <artifactId>configuralize</artifactId>
-    <version>1.3.1</version>
+    <version>1.4.0</version>
 </dependency>
 ```
 
