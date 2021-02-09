@@ -27,7 +27,6 @@ public class DynamicConfig {
     }
     public DynamicConfig(Language language) {
         this.language = language;
-        Arrays.stream(sources).forEach(this::addSource);
     }
 
     /**
