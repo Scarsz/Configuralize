@@ -1,15 +1,17 @@
 package github.scarsz.configuralize;
 
 import alexh.weak.Dynamic;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.yaml.snakeyaml.parser.ParserException;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @SuppressWarnings({"SameParameterValue", "WeakerAccess"})
 public class Provider {
@@ -48,12 +50,16 @@ public class Provider {
         this.values = loadValues();
     }
     public Dynamic loadValues() throws ParseException, IOException {
-        return load(config, source, FileUtils.readFileToString(source.getFile(), "UTF-8"));
+        return load(config, source, new String(Files.readAllBytes(source.getFile().toPath())));
     }
     public Dynamic loadResource() throws ParseException, IOException {
         try (InputStream stream = source.getResource().openStream()) {
             Objects.requireNonNull(stream, "Unknown resource " + source.getResourcePath(config.getLanguage()));
-            return load(config, source, IOUtils.toString(stream, StandardCharsets.UTF_8));
+            try (InputStreamReader reader = new InputStreamReader(stream)) {
+                try (BufferedReader buffer = new BufferedReader(reader)) {
+                    return load(config, source, buffer.lines().collect(Collectors.joining("\n")));
+                }
+            }
         }
     }
 
@@ -69,7 +75,7 @@ public class Provider {
         String resource = source.getResourcePath(config.getLanguage());
         try (InputStream stream = source.getResource().openStream()) {
             Objects.requireNonNull(stream, "Unknown resource " + source.getResourcePath(config.getLanguage()));
-            FileUtils.copyInputStreamToFile(stream, source.getFile());
+            Files.copy(stream, source.getFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
         }
     }
 
