@@ -66,6 +66,17 @@
         </plugins>
     </build>
 
+    <distributionManagement>
+        <repository>
+            <id>scarsz</id>
+            <url>https://nexus.scarsz.me/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>scarsz</id>
+            <url>https://nexus.scarsz.me/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <dependencies>
         <dependency>
             <groupId>com.github.alexheretic</groupId>
